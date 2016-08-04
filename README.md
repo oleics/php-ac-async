@@ -4,7 +4,7 @@ ac-async
 
 Dependency-free, tick-based event-loop for non-blocking I/O and realtime simulations with PHP.
 
-No worries! No need to learn whole new framework! ``ac-async`` is here to give you the necessary interface to write asynchronous in a convenient way.
+No worries! No need to learn whole new framework! ``ac-async`` is here to give you only the necessary interface in a convenient way to write asynchronous functions and utilize non-blocking I/O in PHP.
 
 Features / Goals
 ----------------
@@ -51,7 +51,7 @@ wget -qO-  https://raw.githubusercontent.com/oleics/ac-async/master/install.php 
 #### Composer
 
 ```sh
-composer require async-php/async
+composer require oleics/ac-async
 ```
 
 Usage Examples
