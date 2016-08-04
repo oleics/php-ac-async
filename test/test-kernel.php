@@ -31,13 +31,6 @@ Testa::Spec(function(){
         $ctx->kernel = null;
       });
 
-      // describe('$kernel->select', function() {
-      //   it('is a StreamSelect-instance', function($ctx) {
-      //     assert(isset($ctx->kernel->select), 'select-prop is defined.');
-      //     assert($ctx->kernel->select instanceof \Ac\Stream\StreamSelect, 'select-prop is an instance of \Ac\Stream\StreamSelect.');
-      //   });
-      // });
-
       describe('$kernel->isRunning', function() {
         it('is a flag', function($ctx) {
           assert(isset($ctx->kernel->isRunning), 'isRunning-prop is defined.');

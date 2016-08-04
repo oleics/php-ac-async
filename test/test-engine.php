@@ -14,9 +14,7 @@ Testa::Spec(function(){
       assert(Engine::class === 'Ac\Async\Engine');
     });
 
-    function makeEngineInstance($framerate, $kernelFramerate = null, $defaultToFileMode = false) {
-      $null = null;
-      // $kernel = new Kernel(isset($kernelFramerate) ? $kernelFramerate : 1/60, $null, $defaultToFileMode);
+    function makeEngineInstance($framerate) {
       $kernel = Async::getKernel();
       $engine = new Engine($framerate, $kernel);
       return $engine;
@@ -242,13 +240,15 @@ Testa::Spec(function(){
             $startFrame = $ctx->engine->frame;
             $stopAtFrame = $startFrame + ceil($timeout / $ctx->engine->framerate);
             $timeoutStart = microtime(true);
+            $expectedFrame = (int)($startFrame + ceil($timeout / $ctx->engine->framerate));
             $expectedRndArg = rand();
 
-            $ctx->engine->setTimeout(function(Engine $engine, $rndArg) use(&$timeout, &$called, &$timeoutStart, &$expectedRndArg) {
+            $ctx->engine->setTimeout(function(Engine $engine, $rndArg) use(&$timeout, &$called, &$timeoutStart, &$expectedFrame, &$expectedRndArg) {
               ++$called;
               $timeoutElapsed = microtime(true) - $timeoutStart;
-              $timeoutExpected = $timeout - $engine->framerate;
-              assert($timeoutElapsed >= $timeoutExpected, "setTimeout timeoutExpected $timeoutElapsed >= $timeoutExpected (timeout $timeout)");
+              $timeoutExpected = $timeout - $engine->framerate - ($engine->framerate*0.3);
+              assert($expectedFrame === $engine->frame, "setTimeout expectedFrame $expectedFrame === $engine->frame (timeout $timeout)");
+              assert($timeoutExpected <= $timeoutElapsed, "setTimeout timeoutExpected $timeoutExpected <= $timeoutElapsed (timeout $timeout)");
               assert($expectedRndArg === $rndArg, "setTimeout expectedRndArg $expectedRndArg === $rndArg");
             }, [$ctx->engine, $expectedRndArg], $timeout);
 
@@ -389,12 +389,9 @@ Testa::Spec(function(){
       });
     }
 
-    // test_EngineInstance(makeEngineInstance( 1/3, null, false));
-    // test_EngineInstance(makeEngineInstance( 1/3, null, true));
-    test_EngineInstance(makeEngineInstance(1/30, null, false));
-    test_EngineInstance(makeEngineInstance(1/30, null, true));
-    test_EngineInstance(makeEngineInstance(1/60, null, false));
-    test_EngineInstance(makeEngineInstance(1/60, null, true));
+    test_EngineInstance(makeEngineInstance( 1/3));
+    test_EngineInstance(makeEngineInstance(1/30));
+    test_EngineInstance(makeEngineInstance(1/60));
 
   });
 

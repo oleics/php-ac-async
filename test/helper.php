@@ -22,15 +22,10 @@ function startTestWebserver(&$ctx, callable &$done, $host = null, $filepath = nu
 
   $started = false;
 
-  Stream::read($server->stdout, function($data) use(&$started) {
-    if($data === null) return;
-    fwrite(STDERR, "\nstdout: $data\n");
-  });
-
-  Stream::read($server->stderr, function($data) use(&$started) {
+  $server->read(function($data) use(&$started) {
     if($data === null) return;
     if($started) return;
-    fwrite(STDERR, "\nstderr: $data\n");
+    fwrite(STDERR, "\nserver-process: $data\n");
   });
 
   $check;
@@ -45,7 +40,6 @@ function startTestWebserver(&$ctx, callable &$done, $host = null, $filepath = nu
     async_setTimeout($check, 0.3);
   };
   async($check);
-  // $check();
 }
 
 function stopTestWebserver(&$ctx) {
@@ -61,4 +55,20 @@ function createClassWithTrait($traitName) {
   $classname = 'AcAsyncTestHelper_DynamicClassWithTrait_'.$num.'';
   eval('class '.$classname.' { use '.$traitName.'; }');
   return $classname;
+}
+
+
+function testUsedTraits($classname, array $expectedTraits) {
+  describe('Traits of '.$classname.'', function() use(&$classname, &$expectedTraits) {
+    $testTrait = function($trait) use(&$classname) {
+      it(''.$trait.'', function() use(&$classname, &$trait) {
+        $usedTraits = array_values(class_uses($classname));
+        assert(array_search($trait, $usedTraits, true) !== false, 'Trait "'.$trait.'" is used.');
+      });
+    };
+
+    foreach($expectedTraits as $expectedTrait) {
+      $testTrait($expectedTrait);
+    }
+  });
 }

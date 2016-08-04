@@ -11,19 +11,19 @@ Testa::Spec(function(){
 
   describe('trait Stream\ReadTrait', function() {
 
-    before(function($ctx){
-      $ctx->classname = createClassWithTrait('Ac\Async\Stream\ReadTrait');
-    });
-
-    after(function($ctx){
-      unset($ctx->classname);
-    });
-
     it('is available under "Ac\Async\Stream\ReadTrait"', function() {
+      assert(trait_exists('Ac\Async\Stream\ReadTrait'));
       assert(ReadTrait::class === 'Ac\Async\Stream\ReadTrait');
     });
 
-    describe('funcs', function(){
+    describe('Static Functions', function(){
+      before(function($ctx){
+        $ctx->classname = createClassWithTrait('Ac\Async\Stream\ReadTrait');
+      });
+
+      after(function($ctx){
+        unset($ctx->classname);
+      });
 
       before('start webserver', function(&$ctx, callable $done) {
         startTestWebserver($ctx, $done, 'localhost:8000', __DIR__.'/www/');
