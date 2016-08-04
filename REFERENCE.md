@@ -1,5 +1,14 @@
 
   * <a name="Ac_Async_Async"></a> *class* **Async** ( )  
+    * *Constants*  
+      * *Async*::**STATE_KERNEL_STOPPED** = 1
+      * *Async*::**STATE_KERNEL_STOPPING** = 2
+      * *Async*::**STATE_KERNEL_EMPTY** = 3
+      * *Async*::**STATE_KERNEL_RUNNING** = 4
+      * *Async*::**STATE_ENGINE_STOPPED** = 5
+      * *Async*::**STATE_ENGINE_STOPPING** = 6
+      * *Async*::**STATE_ENGINE_EMPTY** = 7
+      * *Async*::**STATE_ENGINE_RUNNING** = 8
     * *Static Methods*  
       * *Async*::**configure**  ( $engine_framerate = null, $kernel_framerate = null, $kernel_defaultToFileMode = false )  
       * *Async*::**wrap**  ( $filename )  
@@ -33,6 +42,10 @@
       * *Json*::**read**  ( $stream, *callable* $callback, *callable* $callbackData = null )  
       * *Json*::**write**  ( $stream )  
   * <a name="Ac_Async_Kernel"></a> *class* **Kernel** ( $framerate = null, *[Select](#Ac_Async_Select)* &$select = null, $defaultToFileMode = false )  
+    * *Constants*  
+      * *Kernel*::**MODE_SOCKET** = "socket"
+      * *Kernel*::**MODE_FILE** = "file"
+      * *Kernel*::**READ_BYTES_MAX** = 8192
     * *Properties*  
       * *Kernel*->**mode**  
       * *Kernel*->**isRunning** = false  
@@ -54,8 +67,8 @@
       * *Kernel*->**setLog**  ( $log )  
       * *Kernel*->**frameInfos**  (  )  
     * *Static Properties*  
-      * *Kernel*::**SUCCESSIVE_DRIFTS_WARN** = 20  
-      * *Kernel*::**SUCCESSIVE_DRIFTS_FATAL** = 200  
+      * *Kernel*::**$SUCCESSIVE_DRIFTS_WARN** = 20  
+      * *Kernel*::**$SUCCESSIVE_DRIFTS_FATAL** = 200  
   * <a name="Ac_Async_Log"></a> *class* **Log** ( $stream = Ac\Async\STDOUT )  
     * *Methods*  
       * *Log*->**__construct**  ( $stream = Ac\Async\STDOUT )  
@@ -66,6 +79,8 @@
       * *Log*->**fatal**  (  )  
       * *Log*->**beep**  (  )  
   * <a name="Ac_Async_Process"></a> *class* **Process** ( $cmd )  
+    * *Constants*  
+      * *Process*::**SIGNAL_SIGTERM** = 15
     * *Properties*  
       * *Process*->**stdin**  
       * *Process*->**stdout**  
@@ -89,6 +104,13 @@
     * *Static Methods*  
       * *Process*::**spawn**  ( $cmd )  
   * <a name="Ac_Async_Select"></a> *class* **Select** ( $timeoutSeconds = 0, $timeoutMicroseconds = 200000 )  
+    * *Constants*  
+      * *Select*::**CHUNK_SIZE** = 8192
+      * *Select*::**READ_BUFFER_SIZE** = 0
+      * *Select*::**WRITE_BUFFER_SIZE** = 0
+      * *Select*::**IDLE** = 0
+      * *Select*::**ACTIVE** = 1
+      * *Select*::**DONE** = 3
     * *Methods*  
       * *Select*->**__construct**  ( $timeoutSeconds = 0, $timeoutMicroseconds = 200000 )  
       * *Select*->**select**  (  )  
