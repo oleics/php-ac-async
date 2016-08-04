@@ -81,6 +81,8 @@ php vendor/oleics/ac-testa/testa.phar
 API
 ---
 
+[REFERENCE.md](REFERENCE.md)
+
 ### Global Functions
 
 *void* **async** ( *callable* $fn, *integer* $priority = 0, *array* $args = null )
