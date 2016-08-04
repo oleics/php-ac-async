@@ -81,8 +81,6 @@ php vendor/oleics/ac-testa/testa.phar
 API
 ---
 
-[REFERENCE.md](REFERENCE.md)
-
 ### Global Functions
 
 *void* **async** ( *callable* $fn, *integer* $priority = 0, *array* $args = null )
@@ -97,48 +95,7 @@ API
 
 *void* **async_removeFromSchedules** ( *callable* $fn )
 
-### namespace Ac\Async
-
-#### Classes
-
-*class* **Process** ( *string* $cmd )
-
-  * Statics  
-
-    * *Process* Process::**spawn** ( $cmd )  
-      Returns a new Process-instance.
-
-*abstract* *class* **Stream**
-
-  * *trait* Stream\\**CommonTrait**
-
-    * *resource* Stream::**openProcess** ( *string* $cmd )  
-      Returns a readable stream created by ``popen()``.
-
-    * *resource* Stream::**openReadable** ( *string* $url = 'php://temp' )  
-      Returns a readable stream.
-
-    * *resource* Stream::**openWritable** ( *string* $url = 'php://temp' )  
-      Returns a writable stream.
-
-    * *resource* Stream::**openDuplex** ( *string* $url = 'php://temp' )  
-      Returns a read- and writable stream.
-
-  * *trait* Stream\\**ProcessTrait**
-
-    * *Process* Stream::**spawnProcess** ( *string* $cmd )  
-      Returns a Process-instance.
-
-
-  * *trait* Stream\\**ReadTrait**
-
-    * *callable* Stream::**read** ( resource $stream, callable $onData )  
-
-    * *callable* Stream::**readLines** ( resource $stream, callable $onLine)  
-
-  * *trait* Stream\\**WriteTrait**
-
-    * *callable* Stream::**write** ( resource $stream )  
+### [REFERENCE.md](REFERENCE.md)
 
 MIT License
 -----------
