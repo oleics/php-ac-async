@@ -4,7 +4,7 @@ ac-async
 
 Dependency-free, tick-based event-loop for non-blocking I/O and realtime simulations with PHP.
 
-No worries! No need to learn whole new framework! ``ac-async`` is here to give you only the necessary interface in a convenient way to write asynchronous functions and utilize non-blocking I/O in PHP.
+No worries! No need to learn a whole new framework, ``ac-async`` is here to give you only the necessary interface in a convenient way to write asynchronous functions and utilize non-blocking I/O in PHP.
 
 Features / Goals
 ----------------
