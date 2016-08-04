@@ -61,7 +61,7 @@ Usage Examples
 php async.phar examples/simple.php
 ```
 
-See examples-folder for more.
+See [examples-folder](examples) for more.
 
 Tests
 -----
