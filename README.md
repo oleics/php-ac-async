@@ -81,21 +81,7 @@ php vendor/oleics/ac-testa/testa.phar
 API
 ---
 
-### Global Functions
-
-*void* **async** ( *callable* $fn, *integer* $priority = 0, *array* $args = null )
-
-*void* **async_schedule** ( *callable* $fn, *integer* $forFrame = 0, *array* $args = null )
-
-*void* **async_scheduleEach** ( *callable* $fn, *integer* $eachFrame = 0, *array* $args = null )
-
-*void* **async_setTimeout** ( *callable* $fn, *float* $seconds = 0.0, *array* $args = null )
-
-*void* **async_setInterval** ( *callable* $fn, *float* $seconds = 0.0, *array* $args = null )
-
-*void* **async_removeFromSchedules** ( *callable* $fn )
-
-### [REFERENCE.md](REFERENCE.md)
+[REFERENCE.md](REFERENCE.md)
 
 MIT License
 -----------
