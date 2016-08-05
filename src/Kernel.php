@@ -10,6 +10,9 @@ use Ac\Async\Log;
 
 use Ac\Async\Kernel\LogTrait;
 
+/**
+ * The kernel.
+ */
 class Kernel {
 
   use LogTrait;

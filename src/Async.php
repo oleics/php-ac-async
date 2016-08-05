@@ -4,32 +4,62 @@ namespace /* global */ {
 
   use Ac\Async\Async;
 
-  /** @return void */
+  /**
+   * Execute callable `$fn`.
+   *
+   * @param callable $fn
+   * @param int $priority
+   * @param array $args
+   * @return void
+   */
   function async(callable $fn, $priority = 0, array $args = null) {
     Async::getEngine()->enqueue($fn, $args, $priority);
   }
 
-  /** @return void */
+  /**
+   * @param callable $fn
+   * @param int $forFrame
+   * @param array $args
+   * @return void
+   */
   function async_schedule(callable $fn, $forFrame = 0, array $args = null) {
     Async::getEngine()->schedule($fn, $args, $forFrame);
   }
 
-  /** @return void */
+  /**
+   * @param callable $fn
+   * @param int $eachFrame
+   * @param array $args
+   * @return void
+   */
   function async_scheduleEach(callable $fn, $eachFrame = 0, array $args = null) {
     Async::getEngine()->scheduleEach($fn, $args, $eachFrame);
   }
 
-  /** @return void */
+  /**
+   * @param callable $fn
+   * @param real $seconds
+   * @param array $args
+   * @return void
+   */
   function async_setTimeout(callable $fn, $seconds = 0.0, array $args = null) {
     return Async::getEngine()->setTimeout($fn, $args, $seconds);
   }
 
-  /** @return void */
+  /**
+   * @param callable $fn
+   * @param real $seconds
+   * @param array $args
+   * @return void
+   */
   function async_setInterval(callable $fn, $seconds = 0.0, array $args = null) {
     return Async::getEngine()->setInterval($fn, $args, $seconds);
   }
 
-  /** @return void */
+  /**
+   * @param callable $fn
+   * @return void
+   */
   function async_removeFromSchedules(callable $fn) {
     Async::getEngine()->removeFromSchedules($fn);
   }
@@ -42,7 +72,7 @@ namespace Ac\Async {
   use Ac\Async\Kernel;
   use Ac\Async\Engine;
 
-  class Async {
+  abstract class Async {
 
     const STATE_KERNEL_STOPPED  = 1;
     const STATE_KERNEL_STOPPING = 2;
@@ -66,6 +96,13 @@ namespace Ac\Async {
 
     //
 
+    /**
+     *  @param real|null $engine_framerate
+     *  @param real|null $kernel_framerate
+     *  @param bool $kernel_defaultToFileMode
+     *
+     *  @return void
+     */
     static public function configure($engine_framerate = null, $kernel_framerate = null, $kernel_defaultToFileMode = false) {
       self::$engine_framerate = $engine_framerate;
       self::$kernel_framerate = $kernel_framerate;
@@ -74,6 +111,10 @@ namespace Ac\Async {
 
     //
 
+    /**
+     * Wrap a file.
+     * @return void
+     */
     static public function wrap($filename) {
       self::blockStart();
       require($filename);

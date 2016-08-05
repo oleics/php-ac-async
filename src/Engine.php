@@ -10,8 +10,16 @@ class Engine {
   protected $kernel;
   protected $kernelCallback;
 
+  /**
+   *  @var real
+   */
   public $framerate = 0.0167; // 60 fps
+
+  /**
+   *  @var real
+   */
   public $frame     = 0;
+
   protected $framerate_eachKernelFrame;
 
   protected $queue = [];
