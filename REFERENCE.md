@@ -1,9 +1,11 @@
 
-# ac-async / Reference 
+ac-async
 
-### Global  
+# Reference 
 
-##### *Functions (5)*
+## Global  
+
+### *Functions (5)*
 
   * *void* **async** ( *callable* $fn, *integer* $priority = 0, *array* $args = null ) [#](src/Async.php#L15-L17)  
     Execute callable `$fn`.  
@@ -17,13 +19,13 @@
   * *void* **async_setInterval** ( *callable* $fn, *real* $seconds = 0.0, *array* $args = null ) [#](src/Async.php#L55-L57)  
 
 
-### Ac\Async  
+## Ac\Async  
 
-##### *Classes (9)*
+### *Classes (9)*
 
   * <a name="Ac_Async_Async"></a> *abstract* *class* **Async** [#](src/Async.php#L75-L272)  
 
-    * Constants (8)  
+    * *Constants (8)*  
 
       * *integer* **STATE_KERNEL_STOPPED** = 1  
       * *integer* **STATE_KERNEL_STOPPING** = 2  
@@ -34,7 +36,7 @@
       * *integer* **STATE_ENGINE_EMPTY** = 7  
       * *integer* **STATE_ENGINE_RUNNING** = 8  
 
-    * Static Methods (7)  
+    * *Static Methods (7)*  
 
       * *void* _Async::_**$configure** ( *real|null* $engine_framerate = null, *real|null* $kernel_framerate = null, *boolean* $kernel_defaultToFileMode = false ) [#](src/Async.php#L106-L110)  
 
@@ -53,13 +55,13 @@
 
   * <a name="Ac_Async_Engine"></a> *class* **Engine** [#](src/Engine.php#L8-L245)  
 
-    * Properties (2)  
+    * *Properties (2)*  
 
       * *real* _Engine->_**framerate** = 0.0167  
 
       * *real* _Engine->_**frame** = 0  
 
-    * Methods (13)  
+    * *Methods (13)*  
 
       * _Engine->_**__construct** ( $framerate = null, *<a href="#Ac_Async_Kernel">Kernel</a>* &$kernel = null ) [#](src/Engine.php#L29-L35)  
 
@@ -89,7 +91,7 @@
 
   * <a name="Ac_Async_Json"></a> *abstract* *class* **Json** [#](src/Json.php#L9-L30)  
 
-    * Static Methods (4)  
+    * *Static Methods (4)*  
 
       * _Json::_**$decode** ( $d ) [#](src/Json.php#L14-L20)  
 
@@ -102,13 +104,13 @@
   * <a name="Ac_Async_Kernel"></a> *class* **Kernel** [#](src/Kernel.php#L16-L228)  
     The kernel.  
 
-    * Constants (3)  
+    * *Constants (3)*  
 
       * *string* **MODE_SOCKET** = socket  
       * *string* **MODE_FILE** = file  
       * *integer* **READ_BYTES_MAX** = 8192  
 
-    * Properties (8)  
+    * *Properties (8)*  
 
       * _Kernel->_**mode**  
 
@@ -126,7 +128,7 @@
 
       * _Kernel->_**successiveNegativeTimeDrifts** = 0  
 
-    * Methods (10)  
+    * *Methods (10)*  
 
       * _Kernel->_**__construct** ( $framerate = null, *<a href="#Ac_Async_Select">Select</a>* &$select = null, $defaultToFileMode = false ) [#](src/Kernel.php#L46-L74)  
 
@@ -148,7 +150,7 @@
 
       * _Kernel->_**frameInfos** (  ) [#](src/Kernel/LogTrait.php#L15-L67)  
 
-    * Static Properties (2)  
+    * *Static Properties (2)*  
 
       * _Kernel::_**$SUCCESSIVE_DRIFTS_WARN** = 20  
 
@@ -156,7 +158,7 @@
 
   * <a name="Ac_Async_Log"></a> *class* **Log** [#](src/Log.php#L9-L59)  
 
-    * Methods (7)  
+    * *Methods (7)*  
 
       * _Log->_**__construct** ( $stream = Ac\Async\STDOUT ) [#](src/Log.php#L14-L16)  
 
@@ -174,11 +176,11 @@
 
   * <a name="Ac_Async_Process"></a> *class* **Process** [#](src/Process.php#L7-L141)  
 
-    * Constants (1)  
+    * *Constants (1)*  
 
       * *integer* **SIGNAL_SIGTERM** = 15  
 
-    * Properties (11)  
+    * *Properties (11)*  
 
       * _Process->_**stdin**  
 
@@ -202,7 +204,7 @@
 
       * _Process->_**stopsig**  
 
-    * Methods (7)  
+    * *Methods (7)*  
 
       * _Process->_**__construct** ( $cmd ) [#](src/Process.php#L35-L43)  
 
@@ -218,13 +220,13 @@
 
       * _Process->_**write** ( $data, *callable* $callback = null ) [#](src/Process.php#L128-L133)  
 
-    * Static Methods (1)  
+    * *Static Methods (1)*  
 
       * _Process::_**$spawn** ( $cmd ) [#](src/Process.php#L137-L139)  
 
   * <a name="Ac_Async_Select"></a> *class* **Select** [#](src/Select.php#L8-L404)  
 
-    * Constants (6)  
+    * *Constants (6)*  
 
       * *integer* **CHUNK_SIZE** = 8192  
       * *integer* **READ_BUFFER_SIZE** = 0  
@@ -233,7 +235,7 @@
       * *integer* **ACTIVE** = 1  
       * *integer* **DONE** = 3  
 
-    * Methods (23)  
+    * *Methods (23)*  
 
       * _Select->_**__construct** ( $timeoutSeconds = 0, $timeoutMicroseconds = 200000 ) [#](src/Select.php#L40-L47)  
 
@@ -283,7 +285,7 @@
 
   * <a name="Ac_Async_Stream"></a> *abstract* *class* **Stream** [#](src/Stream.php#L10-L17)  
 
-    * Static Methods (9)  
+    * *Static Methods (9)*  
 
       * _Stream::_**$openProcess** ( $cmd ) [#](src/Stream/CommonTrait.php#L7-L9)  
 
@@ -305,13 +307,13 @@
 
   * <a name="Ac_Async_StringParser"></a> *class* **StringParser** [#](src/StringParser.php#L5-L100)  
 
-    * Properties (2)  
+    * *Properties (2)*  
 
       * _StringParser->_**delim**  
 
       * _StringParser->_**bytes**  
 
-    * Methods (5)  
+    * *Methods (5)*  
 
       * _StringParser->_**__construct** ( $delim = "\n" ) [#](src/StringParser.php#L15-L18)  
 
@@ -324,49 +326,49 @@
       * _StringParser->_**bufferClear** (  ) [#](src/StringParser.php#L61-L63)  
 
 
-### Ac\Async\Json  
+## Ac\Async\Json  
 
-##### *Classes (2)*
+### *Classes (2)*
 
   * <a name="Ac_Async_Json_ReadTrait"></a> *abstract* *trait* **ReadTrait** [#](src/Json/ReadTrait.php#L9-L30)  
 
-    * Static Methods (1)  
+    * *Static Methods (1)*  
 
       * _ReadTrait::_**$read** ( $stream, *callable* $callback, *callable* $callbackData = null ) [#](src/Json/ReadTrait.php#L11-L28)  
 
   * <a name="Ac_Async_Json_WriteTrait"></a> *abstract* *trait* **WriteTrait** [#](src/Json/WriteTrait.php#L8-L18)  
 
-    * Static Methods (1)  
+    * *Static Methods (1)*  
 
       * _WriteTrait::_**$write** ( $stream ) [#](src/Json/WriteTrait.php#L10-L16)  
 
 
-### Ac\Async\Kernel  
+## Ac\Async\Kernel  
 
-##### *Classes (1)*
+### *Classes (1)*
 
   * <a name="Ac_Async_Kernel_LogTrait"></a> *abstract* *trait* **LogTrait** [#](src/Kernel/LogTrait.php#L7-L69)  
 
-    * Methods (2)  
+    * *Methods (2)*  
 
       * _LogTrait->_**setLog** ( $log ) [#](src/Kernel/LogTrait.php#L11-L13)  
 
       * _LogTrait->_**frameInfos** (  ) [#](src/Kernel/LogTrait.php#L15-L67)  
 
-    * Static Properties (2)  
+    * *Static Properties (2)*  
 
       * _LogTrait::_**$SUCCESSIVE_DRIFTS_WARN** = 20  
 
       * _LogTrait::_**$SUCCESSIVE_DRIFTS_FATAL** = 200  
 
 
-### Ac\Async\Stream  
+## Ac\Async\Stream  
 
-##### *Classes (4)*
+### *Classes (4)*
 
   * <a name="Ac_Async_Stream_CommonTrait"></a> *abstract* *trait* **CommonTrait** [#](src/Stream/CommonTrait.php#L5-L23)  
 
-    * Static Methods (4)  
+    * *Static Methods (4)*  
 
       * _CommonTrait::_**$openProcess** ( $cmd ) [#](src/Stream/CommonTrait.php#L7-L9)  
 
@@ -378,13 +380,13 @@
 
   * <a name="Ac_Async_Stream_ProcessTrait"></a> *abstract* *trait* **ProcessTrait** [#](src/Stream/ProcessTrait.php#L7-L13)  
 
-    * Static Methods (1)  
+    * *Static Methods (1)*  
 
       * _ProcessTrait::_**$spawnProcess** ( $cmd ) [#](src/Stream/ProcessTrait.php#L9-L11)  
 
   * <a name="Ac_Async_Stream_ReadTrait"></a> *abstract* *trait* **ReadTrait** [#](src/Stream/ReadTrait.php#L9-L58)  
 
-    * Static Methods (3)  
+    * *Static Methods (3)*  
 
       * _ReadTrait::_**$read** ( $stream, *callable* $callback ) [#](src/Stream/ReadTrait.php#L11-L33)  
 
@@ -394,7 +396,7 @@
 
   * <a name="Ac_Async_Stream_WriteTrait"></a> *abstract* *trait* **WriteTrait** [#](src/Stream/WriteTrait.php#L9-L56)  
 
-    * Static Methods (1)  
+    * *Static Methods (1)*  
 
       * _WriteTrait::_**$write** ( $stream ) [#](src/Stream/WriteTrait.php#L11-L54)  
 
