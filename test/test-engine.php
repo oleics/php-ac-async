@@ -93,7 +93,7 @@ Testa::Spec(function(){
               ++$called;
               // if(isset($msg)) $engine->log($msg);
               if(isset($sleep)) usleep($sleep * 1e6);
-              if(isset($expectedFrame)) assert($engine->frame === $expectedFrame, '['.$msg.'] enqueue '.$engine->frame.' === '.$expectedFrame.'');
+              if(isset($expectedFrame)) assert($expectedFrame === $engine->frame, '['.$msg.'] enqueue expectedFrame '.$expectedFrame.' === '.$engine->frame.'');
               assert(array_shift($expectedOrder[$priority]) === $msg, "enqueue order");
               assert($expectedRndArg === $rndArg, "enqueue expectedRndArg $expectedRndArg === $rndArg");
             }, [$engine, $expectedRndArg], $priority);

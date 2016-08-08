@@ -17,11 +17,11 @@ trait ReadTrait {
       if($buffer === '') {
         if(feof($stream)) {
           fclose($stream);
-          async($callback, 10, [null]);
+          async($callback, [null]);
         }
         return;
       }
-      async($callback, 10, [$buffer]);
+      async($callback, [$buffer]);
     };
 
     $select->addCallbackReadable($readableCallback, $stream);
@@ -38,13 +38,13 @@ trait ReadTrait {
       if($data === null) {
         $readUnbind();
         foreach($parser->end() as $part) {
-          async($callback, 10, [$part]);
+          async($callback, [$part]);
         }
-        async($callback, 10, [null]);
+        async($callback, [null]);
         return;
       }
       foreach($parser->write($data) as $part) {
-        async($callback, 10, [$part]);
+        async($callback, [$part]);
       }
     });
     return $readUnbind;

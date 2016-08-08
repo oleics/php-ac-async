@@ -44,7 +44,7 @@ Testa::Spec(function(){
                 ftruncate($stream, 0);
                 if(--$dataToWritePending === 0) {
                   fclose($stream);
-                  async($done, 10, []);
+                  async($done, []);
                 }
               };
               if($numDataWritten) {
@@ -69,12 +69,12 @@ Testa::Spec(function(){
             $check = function() use(&$done, &$streamsPending, &$nonBlocking) {
               assert($nonBlocking);
               if(--$streamsPending === 0) {
-                async($done, 10, []);
+                async($done, []);
               }
             };
 
             foreach($streams as $stream) {
-              async($testStreamWrite, 10, [$classname, $stream, $dataToWrite, $check]);
+              async($testStreamWrite, [$classname, $stream, $dataToWrite, $check]);
               // $testStreamWrite($classname, $stream, $dataToWrite, $check);
               $nonBlocking = true;
             }

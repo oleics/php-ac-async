@@ -24,7 +24,7 @@ class StringParser {
       if(!isset($str[$index])) break;
       if(substr($str, $index, $this->bytes) === $this->delim) {
         $index += $this->bytes;
-        // echo "\nLINE ".json_encode($this->buffer.substr($str, $offset, $index-$offset))."\n";
+        // debug('STRINGPARSER LINE', $this->buffer.substr($str, $offset, $index-$offset));
         yield $this->buffer.substr($str, $offset, $index-$offset);
         $offset = $index;
         $this->buffer = '';
@@ -39,15 +39,15 @@ class StringParser {
 
   public function end() {
     if($this->buffer !== '') {
-      // echo "\n END ".json_encode($this->buffer)."\n";
+      // debug('STRINGPARSER END', $this->buffer);
       $str = $this->buffer;
       $this->buffer = '';
       foreach($this->write($str) as $part) {
-        // echo "\n END LINE ".json_encode($part)."\n";
+        // debug('STRINGPARSER END LINE', $part);
         yield $part;
       }
       if($this->buffer !== '') {
-        // echo "\n BUFFER LINE ".json_encode($this->buffer)."\n";
+        // debug('STRINGPARSER END BUFFER LINE', $this->buffer);
         yield $this->buffer;
         $this->buffer = '';
       }

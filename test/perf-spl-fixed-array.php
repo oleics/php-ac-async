@@ -12,8 +12,8 @@ for($i=0; $i<$numOfSamples; $i++) {
   $stack[abs($i % $maxStackSize)] = SplFixedArray::fromArray([$i, $i+1]);
 }
 $duration = microtime(true) - $start;
-echo "total  : ".($duration/1000)." ms\n";
-echo "average: ".(($duration / $numOfSamples)/1000)." ms\n";
+echo "total  : ".($duration*1000)." ms\n";
+echo "average: ".(($duration / $numOfSamples)*1000)." ms\n";
 echo "\n";
 
 echo "SplFixedArray(2)\n";
@@ -26,6 +26,6 @@ for($i=0; $i<$numOfSamples; $i++) {
   $stack[abs($i % $maxStackSize)] = $i+1;
 }
 $duration = microtime(true) - $start;
-echo "total  : ".($duration/1000)." ms\n";
-echo "average: ".(($duration / $numOfSamples)/1000)." ms\n";
+echo "total  : ".($duration*1000)." ms\n";
+echo "average: ".(($duration / $numOfSamples)*1000)." ms\n";
 echo "\n";

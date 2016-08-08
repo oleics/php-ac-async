@@ -3,9 +3,18 @@
 namespace Ac\Async;
 
 use \SplFixedArray;
+use \SplQueue;
 use Ac\Async\Kernel;
 
 class Engine {
+
+  const PRIORITY_HIGHEST = 0;
+  const PRIORITY_HIGHER  = 2;
+  const PRIORITY_HIGH    = 5;
+  const PRIORITY_NORMAL  = 10;
+  const PRIORITY_LOW     = 100;
+  const PRIORITY_LOWER   = 500;
+  const PRIORITY_LOWEST  = 1000;
 
   protected $kernel;
   protected $kernelCallback;
@@ -22,11 +31,23 @@ class Engine {
 
   protected $framerate_eachKernelFrame;
 
-  protected $queue = [];
+  protected $queueSize = 0;
+  protected $queuePriority;
+  protected $queue;
   protected $schedulePerFrame = [];
   protected $scheduleForEachFrame = [];
 
   public function __construct($framerate = null, Kernel &$kernel = null) {
+    $this->queuePriority = new SplFixedArray();
+    $this->queue = [];
+    $this->addPriority(Engine::PRIORITY_HIGHEST);
+    $this->addPriority(Engine::PRIORITY_HIGHER);
+    $this->addPriority(Engine::PRIORITY_HIGH);
+    $this->addPriority(Engine::PRIORITY_NORMAL);
+    $this->addPriority(Engine::PRIORITY_LOW);
+    $this->addPriority(Engine::PRIORITY_LOWER);
+    $this->addPriority(Engine::PRIORITY_LOWEST);
+
     if(isset($framerate)) $this->framerate = $framerate;
     if(!isset($kernel)) {
       $kernel = new Kernel($this->framerate);
@@ -82,7 +103,11 @@ class Engine {
 
     ++$this->frame;
 
-    $args = [&$this];
+    $args = [];
+    if(isset($onFrame)) {
+      $onFrameArgs = [&$this];
+    }
+
     $frame = $this->frame;
     $kernelFramerate = $this->kernel->framerate;
 
@@ -109,32 +134,32 @@ class Engine {
 
     // user-code
     if(isset($onFrame)) {
-      call_user_func_array($onFrame, $args);
+      call_user_func_array($onFrame, $onFrameArgs);
     }
 
     // dequeue prioritized blocks of functions
-    krsort($this->queue);
-    $keys = array_keys($this->queue);
-    $time;
-    while(($key = array_pop($keys)) !== null) {
-
-      $this->queue[$key] = array_reverse($this->queue[$key]);
-      while(($cb = array_pop($this->queue[$key])) !== null) {
+    $this->queuePriority->rewind();
+    while($this->queuePriority->valid()) {
+      $queue = $this->queue[$this->queuePriority->current()];
+      while(!$queue->isEmpty()) {
+        --$this->queueSize;
+        $cb = $queue->dequeue();
         call_user_func_array($cb[0], isset($cb[1]) ? $cb[1] : $args);
       }
-      unset($this->queue[$key]);
 
       // break if previous code already consumed all available kernel-frame-time
       if(microtime(true) - $timeStart >= $kernelFramerate) {
         break(1);
       }
+
+      $this->queuePriority->next();
     }
   }
 
   //
 
   public function isEmpty() {
-    if(!empty($this->queue)) return false;
+    if($this->queueSize > 0) return false;
     if(!empty($this->schedulePerFrame)) return false;
     if(!empty($this->scheduleForEachFrame)) return false;
     return true;
@@ -142,7 +167,7 @@ class Engine {
 
   // Prio Func Queue
 
-  public function enqueue(callable $fn, array $args = null, $priority = 0) {
+  public function enqueue(callable $fn, array $args = null, $priority = Engine::PRIORITY_NORMAL) {
     if(isset($args)) {
       $d = new SplFixedArray(2);
       $d[0] = $fn;
@@ -151,10 +176,23 @@ class Engine {
       $d = new SplFixedArray(1);
       $d[0] = $fn;
     }
-    if(!isset($this->queue[$priority])) {
-      $this->queue[$priority] = [];
+    if(!isset($priority)) $priority = Engine::PRIORITY_NORMAL;
+    ++$this->queueSize;
+    $this->queue[$priority]->enqueue($d);
+  }
+
+  protected function addPriority($priority) {
+    if(!is_int($priority)) {
+      throw new Exception('Priority must be an integer, got "'.gettype($priority).'".');
     }
-    $this->queue[$priority][] = $d;
+    if(isset($this->queue[$priority])) {
+      throw new Exception('Priority "'.$priority.'" already exists.');
+    }
+    $arr = $this->queuePriority->toArray();
+    $arr[] = $priority;
+    sort($arr, SORT_NATURAL);
+    $this->queuePriority = SplFixedArray::fromArray($arr);
+    $this->queue[$priority] = new SplQueue();
   }
 
   // Schedules

@@ -20,7 +20,7 @@ trait WriteTrait {
       $current[3] = $current[3] + fwrite($stream, substr($current[0], $current[3]));
       if($current[2] === $current[3]) {
         if($current[1] !== null) {
-          async($current[1], 10, []);
+          async($current[1], []);
         }
         if($queue->isEmpty()) {
           $current = false;

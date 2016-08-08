@@ -62,7 +62,9 @@ Testa::Spec(function(){
             }
             $lines++;
             assert($expectedLines >= $lines, "expectedLines $expectedLines >= $lines");
-            assert("\n" === substr($line, -1));
+            if($expectedLines > $lines) {
+              assert("\n" === substr($line, -1));
+            }
           };
           $r = call_user_func([$ctx->classname, 'readLines'], $stream, $callback);
         });

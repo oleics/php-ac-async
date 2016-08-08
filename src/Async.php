@@ -4,6 +4,11 @@ namespace /* global */ {
 
   use Ac\Async\Async;
 
+  function debug() {
+    fwrite(STDOUT, "\n".json_encode(func_get_args(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)."\n");
+    fflush(STDOUT);
+  }
+
   /**
    * Execute callable `$fn`.
    *
@@ -12,7 +17,7 @@ namespace /* global */ {
    * @param array $args
    * @return void
    */
-  function async(callable $fn, $priority = 0, array $args = null) {
+  function async(callable $fn, array $args = null, $priority = Async::PRIORITY_NORMAL) {
     Async::getEngine()->enqueue($fn, $args, $priority);
   }
 
@@ -73,6 +78,14 @@ namespace Ac\Async {
   use Ac\Async\Engine;
 
   abstract class Async {
+
+    const PRIORITY_HIGHEST = Engine::PRIORITY_HIGHEST;
+    const PRIORITY_HIGHER  = Engine::PRIORITY_HIGHER;
+    const PRIORITY_HIGH    = Engine::PRIORITY_HIGH;
+    const PRIORITY_NORMAL  = Engine::PRIORITY_NORMAL;
+    const PRIORITY_LOW     = Engine::PRIORITY_LOW;
+    const PRIORITY_LOWER   = Engine::PRIORITY_LOWER;
+    const PRIORITY_LOWEST  = Engine::PRIORITY_LOWEST;
 
     const STATE_KERNEL_STOPPED  = 1;
     const STATE_KERNEL_STOPPING = 2;
