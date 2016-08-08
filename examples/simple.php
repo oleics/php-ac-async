@@ -2,23 +2,23 @@
 
 async(function() {
   echo "enqueue 10\n";
-}, 10);
+}, null, 10);
 
 async(function() {
   echo "enqueue 1\n";
   async(function() {
     echo "enqueue 100.a\n";
-  }, 100);
+  }, null, 100);
   async(function() {
     echo "enqueue 100.b\n";
-  }, 100);
+  }, null, 100);
   async(function() {
     echo "enqueue 10.a\n";
-  }, 10);
+  }, null, 10);
   async(function() {
     echo "enqueue 10.b\n";
-  }, 10);
-}, 1);
+  }, null, 10);
+}, null, 2);
 
 async_schedule(mkFunc('schedule 10'), 10);
 async_scheduleEach(mkFunc('scheduleEach 100'), 100);
