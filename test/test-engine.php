@@ -246,7 +246,7 @@ Testa::Spec(function(){
             $ctx->engine->setTimeout(function(Engine $engine, $rndArg) use(&$timeout, &$called, &$timeoutStart, &$expectedFrame, &$expectedRndArg) {
               ++$called;
               $timeoutElapsed = microtime(true) - $timeoutStart;
-              $timeoutExpected = $timeout - $engine->framerate - ($engine->framerate*0.3);
+              $timeoutExpected = $timeout - $engine->framerate - ($engine->framerate*0.4);
               assert($expectedFrame === $engine->frame, "setTimeout expectedFrame $expectedFrame === $engine->frame (timeout $timeout)");
               assert($timeoutExpected <= $timeoutElapsed, "setTimeout timeoutExpected $timeoutExpected <= $timeoutElapsed (timeout $timeout)");
               assert($expectedRndArg === $rndArg, "setTimeout expectedRndArg $expectedRndArg === $rndArg");
