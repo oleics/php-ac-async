@@ -6,6 +6,7 @@ use \Exception;
 
 use Ac\Async\Promise\FakeNullTrait;
 use Ac\Async\Promise\ThenableTrait;
+use Ac\Async\Promise\NonBlockingModeTrait;
 use Ac\Async\Promise\Task;
 
 define('AC_ASYNC_PROMISE_STATE_PENDING',   1);
@@ -21,6 +22,7 @@ final class Promise {
 
   use FakeNullTrait;
   use ThenableTrait;
+  use NonBlockingModeTrait;
 
   const STATE_PENDING   = AC_ASYNC_PROMISE_STATE_PENDING;
   const STATE_FULFILLED = AC_ASYNC_PROMISE_STATE_FULFILLED;
@@ -54,7 +56,11 @@ final class Promise {
           }
           $this->result = $result;
           $this->state = self::STATE_FULFILLED;
-          $this->exec_chain();
+          if(self::isNonBlockingMode()) {
+            async(function(){ $this->exec_chain(); });
+          } else {
+            $this->exec_chain();
+          }
         },
         // reject
         function($reason) {
@@ -69,7 +75,11 @@ final class Promise {
     } catch(Exception $reason) {
       $this->reason = $reason;
       $this->state = self::STATE_REJECTED;
-      $this->exec_chain();
+      if(self::isNonBlockingMode()) {
+        async(function(){ $this->exec_chain(); });
+      } else {
+        $this->exec_chain();
+      }
     }
   }
 
@@ -130,7 +140,11 @@ final class Promise {
           $chain = [];
           $this->chain = [];
           if($result->state !== self::STATE_PENDING) {
-            $result->exec_chain();
+            if(self::isNonBlockingMode()) {
+              async(function() use($result) { $result->exec_chain(); });
+            } else {
+              $result->exec_chain();
+            }
           }
           break;
         }

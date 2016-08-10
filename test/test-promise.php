@@ -10,6 +10,18 @@ Testa::Spec(function(){
 
   describe('class Promise ($stream = STDOUT)', function() {
 
+    before('enable promise non-blocking-mode', function($ctx){
+      if($ctx->wasBlockingMode = ! Promise::isNonBlockingMode()) {
+        Promise::enableNonBlockingMode();
+      }
+    });
+
+    after('restore promise blocking-mode', function($ctx){
+      if($ctx->wasBlockingMode) {
+        Promise::disableNonBlockingMode();
+      }
+    });
+
     it('is available under "Ac\Async\Promise"', function() {
       assert(Promise::class === 'Ac\Async\Promise');
     });
@@ -136,6 +148,10 @@ Testa::Spec(function(){
 
       describe('->then(callable|Promise|mixed $onFulfilled = null, callable $onRejected = null)', function(){
         it('appends actions to run after a promise was fulfilled or rejected', function(){
+          if($isNonBlockingMode = Promise::isNonBlockingMode()) {
+            Promise::disableNonBlockingMode();
+          }
+
           $called = 0;
 
           $resolveMe;
@@ -172,6 +188,10 @@ Testa::Spec(function(){
             assert('ooops!' === $d->getMessage());
           });
           assert(4 === $called, "called 4 === $called");
+
+          if($isNonBlockingMode) {
+            Promise::enableNonBlockingMode();
+          }
         });
 
         it('returns a Promise', function(){
