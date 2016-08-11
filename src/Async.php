@@ -107,14 +107,12 @@ namespace Ac\Async {
     static protected $blocks = 0;
     static protected $state;
 
-    //
-
     /**
-     *  @param real|null $engine_framerate
-     *  @param real|null $kernel_framerate
-     *  @param bool $kernel_defaultToFileMode
+     * @param real|null $engine_framerate
+     * @param real|null $kernel_framerate
+     * @param bool $kernel_defaultToFileMode
      *
-     *  @return void
+     * @return void
      */
     static public function configure($engine_framerate = null, $kernel_framerate = null, $kernel_defaultToFileMode = false) {
       self::$engine_framerate = $engine_framerate;
@@ -122,15 +120,33 @@ namespace Ac\Async {
       self::$kernel_defaultToFileMode = $kernel_defaultToFileMode;
     }
 
-    //
-
     /**
-     * Wrap a file.
+     * Wraps a file or a callable.
+     *
+     * @param string|callable|array $filenameOrCallable
+     * @param array|null $args
+     *
      * @return void
      */
-    static public function wrap($filename) {
+    static public function wrap($filenameOrCallable, array $args = null) {
       self::blockStart();
-      require($filename);
+      if(is_array($filenameOrCallable)) {
+        foreach($filenameOrCallable as $f) {
+          self::wrap($f);
+        }
+      } else if(is_callable($filenameOrCallable)) {
+        if(isset($args)) {
+          call_user_func_array($filenameOrCallable, $args);
+        } else {
+          call_user_func($filenameOrCallable);
+        }
+      } else {
+        if(isset($args)) {
+          call_user_func_array(require($filename), $args);
+        } else {
+          require($filename);
+        }
+      }
       self::blockEnd();
     }
 
@@ -159,7 +175,7 @@ namespace Ac\Async {
       }
     }
 
-    static protected function run(callable $fn = null) {
+    static protected function run() {
       if(self::$kernel->isRunning) return;
       self::start();
     }
