@@ -72,6 +72,20 @@ Testa::Spec(function(){
       });
     });
 
+    describe('::openThrough($url = \'php://temp\')', function() {
+      it('returns a resource which is read- and writable', function($ctx) {
+        $r = call_user_func([$ctx->classname, 'openThrough']);
+        assert(is_resource($r));
+        $meta = stream_get_meta_data($r);
+        assert(strpos($meta['mode'], 'w+') !== false, 'Mode contains "w+".');
+        assert(fwrite($r, 'teststring') !== false, 'fwrite() succeeds');
+        assert(fread($r, 1024) === 'teststring', 'fread() returns what was previously witten.');
+        fclose($r);
+        assert(is_resource($r) === false, 'Resource is closed.');
+      });
+    });
+
+
   });
 
 });
