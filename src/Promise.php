@@ -164,7 +164,11 @@ final class Promise {
     if($result === null) {
       $result = $this;
     } else if(!($result instanceof Promise)) {
-      $result = Promise::resolve(self::isFakeNull($result) ? null : $result);
+      if($this->state === self::STATE_REJECTED) {
+        $result = Promise::reject($this->reason);
+      } else {
+        $result = Promise::resolve(self::isFakeNull($result) ? null : $result);
+      }
     }
 
     return $result;
@@ -244,7 +248,10 @@ final class Promise {
       $total = $pending = count($iterable);
       $running = 0;
       $key = -1;
-      $results = [];
+      $results = [
+        'values' => [],
+        'reasons' => []
+      ];
       $dequeue;
       $check;
 
@@ -263,12 +270,14 @@ final class Promise {
       };
 
       $check = function($key, $value, $reason = null) use(&$resolve, &$pending, &$dequeue, &$results) {
-        $results[$key] = [$value, $reason];
+        $results['values'][$key] = $value;
+        $results['reasons'][$key] = $reason;
         if(--$pending > 0) {
           $dequeue();
           return;
         }
-        ksort($results);
+        ksort($results['values']);
+        ksort($results['reasons']);
         $resolve($results);
       };
 

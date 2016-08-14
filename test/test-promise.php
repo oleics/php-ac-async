@@ -390,19 +390,21 @@ Testa::Spec(function(){
                 }, 0.01);
               },
             ], 1)->then(function($d) use(&$done){
-              assert(   1 === $d[0][0], "result    1 === ".$d[0][0]."");
-              assert(null === $d[1][0], "result null === ".$d[1][0]."");
-              assert(   3 === $d[2][0], "result    2 === ".$d[2][0]."");
-              assert(   4 === $d[3][0], "result    3 === ".$d[3][0]."");
-              assert(   5 === $d[4][0], "result    4 === ".$d[4][0]."");
-              assert(   6 === $d[5][0], "result    5 === ".$d[5][0]."");
-              assert(   6 === count($d));
-              assert(range(0, 5) === array_keys($d), "Keys are on-order.");
+              assert(   1 === $d['values'][0], "result    1 === ".$d['values'][0]."");
+              assert(null === $d['values'][1], "result null === ".$d['values'][1]."");
+              assert(   3 === $d['values'][2], "result    2 === ".$d['values'][2]."");
+              assert(   4 === $d['values'][3], "result    3 === ".$d['values'][3]."");
+              assert(   5 === $d['values'][4], "result    4 === ".$d['values'][4]."");
+              assert(   6 === $d['values'][5], "result    5 === ".$d['values'][5]."");
+              assert(   6 === count($d['values']));
+              assert(   6 === count($d['reasons']));
+              assert(range(0, 5) === array_keys($d['values']), "Keys are on-order.");
+              assert(range(0, 5) === array_keys($d['reasons']), "Keys are on-order.");
               $done();
             }, $done);
           });
           it('limits the number of parallel executions');
-          it('always resolves to an array of [value,reason]-pairs');
+          it('always resolves to an array of [values: array, reasons: array]');
         });
 
         describe('::race(array $arr)');
