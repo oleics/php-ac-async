@@ -26,14 +26,10 @@ trait EventEmitterTrait {
     }
 
     $args = array_slice(func_get_args(), 1);
-    $listeners = &$this->_listeners[$event];
-    $len = count($listeners);
-    for($index=0; $index<$len; $index++) {
-      $d = &$listeners[$index];
+    $listeners = array_reverse($this->_listeners[$event]);
+    while(($d = array_pop($listeners)) !== null) {
       if($d[1] === true) {
-        array_splice($listeners, $index, 1);
-        $index--;
-        $len--;
+        array_splice($this->_listeners[$event], array_search($d, $this->_listeners[$event], true), 1);
       }
       call_user_func_array($d[0], $args);
     }
@@ -92,6 +88,9 @@ trait EventEmitterTrait {
       $d = &$listeners[$index];
       if($d[0] === $listener) {
         array_splice($listeners, $index, 1);
+        if(empty($listeners)) {
+          unset($this->_listeners[$event]);
+        }
         return $this;
       }
     }
