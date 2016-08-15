@@ -4,7 +4,10 @@ namespace Ac\Async;
 
 use \Exception;
 
-/**  */
+/**
+ * @triggers newListener $event $listener
+ * @triggers removeListener $event $listener
+ */
 trait EventEmitterTrait {
 
   static public $defaultMaxListeners = 10;
