@@ -99,11 +99,11 @@ class Process {
     $onAnyData = function($d) use(&$callback, &$numOfNulls) {
       if($d === null) {
         if(++$numOfNulls === 2) {
-          async($callback, [null]);
+          call_user_func($callback, null);
         }
         return;
       }
-      async($callback, [$d]);
+      call_user_func($callback, $d);
     };
 
     $unbindStdoutReader = $this->readStdout($onAnyData);
