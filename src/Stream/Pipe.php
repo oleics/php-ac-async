@@ -91,7 +91,9 @@ class Pipe {
   protected function closePipes() {
     if(!isset($this->pipes)) return;
     while(($p = array_pop($this->pipes)) !== null) {
-      fclose($p[0]);
+      if(is_resource($p[0])) {
+        fclose($p[0]);
+      }
     }
   }
 
