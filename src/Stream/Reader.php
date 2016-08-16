@@ -48,9 +48,11 @@ class Reader {
     $buffer = fread($this->stream, Select::CHUNK_SIZE);
     if($buffer === '') {
       if(feof($this->stream)) {
-        $this->emit('end');
         $this->endEmitted = true;
-        fclose($this->stream);
+        $this->emit('end');
+        if(isset($this->stream)) {
+          fclose($this->stream);
+        }
       }
       return;
     }
