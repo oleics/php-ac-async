@@ -23,10 +23,10 @@ class Reader {
 
   public function __construct($stream) {
     $streamId = Select::streamId($stream);
-    if(isset(self::$readers[$streamId])) {
+    if(isset(self::$factoryInstances[$streamId])) {
       throw new Exception('A reader for that stream already exists. You can use Reader::factory($stream) to resolve this.');
     }
-    self::$readers[$streamId] = $this;
+    self::$factoryInstances[$streamId] = $this;
 
     $this->stream = $stream;
     $this->select =& Async::getSelect();
@@ -69,7 +69,7 @@ class Reader {
 
   public function destroy() {
     if(isset($this->stream)) {
-      unset(self::$readers[Select::streamId($this->stream)]);
+      unset(self::$factoryInstances[Select::streamId($this->stream)]);
     }
     if(isset($this->select)) {
       $this->select->removeCallbackReadable($this->onReadable, $this->stream);
@@ -95,13 +95,13 @@ class Reader {
 
   // Static
 
-  static protected $readers = [];
+  static protected $factoryInstances = [];
 
   static public function &factory($stream) {
     $streamId = Select::streamId($stream);
-    if(!isset(self::$readers[$streamId])) {
-      self::$readers[$streamId] = new Reader($stream);
+    if(!isset(self::$factoryInstances[$streamId])) {
+      self::$factoryInstances[$streamId] = new Reader($stream);
     }
-    return self::$readers[$streamId];
+    return self::$factoryInstances[$streamId];
   }
 }

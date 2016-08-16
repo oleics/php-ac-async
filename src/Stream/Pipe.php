@@ -15,9 +15,19 @@ class Pipe {
   protected $closePipes = true;
 
   public function __construct($stream, callable $onDestroy = null, $closePipes = true) {
+    $streamId = Select::streamId($stream);
+    if(isset(self::$factoryInstances[$streamId])) {
+      throw new Exception('A pipe for that stream already exists. You can use Pipe::factory($stream) to resolve this.');
+    }
+    self::$factoryInstances[$streamId] = $this;
+
     $this->stream = $stream;
     $this->onDestroy = $onDestroy;
     $this->closePipes = (bool) $closePipes;
+  }
+
+  public function __destruct() {
+    $this->destroy();
   }
 
   protected function startReading() {
@@ -59,6 +69,9 @@ class Pipe {
   }
 
   public function destroy() {
+    if(isset($this->stream)) {
+      unset(self::$factoryInstances[Select::streamId($this->stream)]);
+    }
     if($this->closePipes) {
       $this->closePipes();
     }
@@ -75,6 +88,7 @@ class Pipe {
   }
 
   protected function closePipes() {
+    if(!isset($this->pipes)) return;
     while(($p = array_pop($this->pipes)) !== null) {
       fclose($p[0]);
     }

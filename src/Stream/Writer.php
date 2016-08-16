@@ -16,6 +16,12 @@ class Writer {
   protected $onWritable;
 
   public function __construct($stream) {
+    $streamId = Select::streamId($stream);
+    if(isset(self::$factoryInstances[$streamId])) {
+      throw new Exception('A writer for that stream already exists. You can use Writer::factory($stream) to resolve this.');
+    }
+    self::$factoryInstances[$streamId] = $this;
+
     $this->stream = $stream;
     $this->select =& Async::getSelect();
     $this->buffer = new SplQueue();
@@ -64,7 +70,7 @@ class Writer {
 
   public function destroy() {
     if(isset($this->stream)) {
-      unset(self::$writers[Select::streamId($this->stream)]);
+      unset(self::$factoryInstances[Select::streamId($this->stream)]);
     }
     if(isset($this->select)) {
       $this->select->removeCallbackWritable($this->onWritable, $this->stream);
@@ -78,13 +84,13 @@ class Writer {
 
   // Static
 
-  static protected $writers = [];
+  static protected $factoryInstances = [];
 
   static public function &factory($stream) {
     $id = Select::streamId($stream);
-    if(!isset(self::$writers[$id])) {
-      self::$writers[$id] = new Writer($stream);
+    if(!isset(self::$factoryInstances[$id])) {
+      self::$factoryInstances[$id] = new Writer($stream);
     }
-    return self::$writers[$id];
+    return self::$factoryInstances[$id];
   }
 }
