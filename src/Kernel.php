@@ -94,10 +94,10 @@ class Kernel {
     if($this->socketPair === false) {
       return false;
     }
-    $this->select->addCallbackWritable(function(&$writable) {
+    $this->select->addCallbackWritable(function($writable) {
       $this->writable($writable);
     }, $this->socketPair[0]);
-    $this->select->addCallbackReadable(function(&$readable) {
+    $this->select->addCallbackReadable(function($readable) {
       $this->readable($readable);
     }, $this->socketPair[1]);
     $this->mode = self::MODE_SOCKET;
@@ -109,10 +109,10 @@ class Kernel {
     if($this->stream === false) {
       return false;
     }
-    $this->select->addCallbackWritable(function(&$writable) {
+    $this->select->addCallbackWritable(function($writable) {
       $this->writable($writable);
     }, $this->stream);
-    $this->select->addCallbackReadable(function(&$readable) {
+    $this->select->addCallbackReadable(function($readable) {
       $this->readable($readable);
     }, $this->stream);
     $this->mode = self::MODE_FILE;
