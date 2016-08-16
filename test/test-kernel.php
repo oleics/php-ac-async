@@ -28,7 +28,7 @@ Testa::Spec(function(){
       });
 
       afterEach(function($ctx){
-        $ctx->kernel = null;
+        unset($ctx->kernel);
       });
 
       describe('$kernel->isRunning', function() {
