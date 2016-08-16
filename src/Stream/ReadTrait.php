@@ -6,6 +6,7 @@ use Ac\Async\Async;
 use Ac\Async\Select;
 use Ac\Async\StringParser;
 use Ac\Async\Stream\Reader;
+use Ac\Async\EventEmitterTrait;
 
 trait ReadTrait {
 
@@ -23,6 +24,9 @@ trait ReadTrait {
     return function() use(&$onData, &$onEnd, &$reader) {
       $reader->removeListener('data', $onData);
       $reader->removeListener('end', $onEnd);
+      if($reader->unused()) {
+        $reader->destroy();
+      }
     };
   }
 
