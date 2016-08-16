@@ -8,8 +8,8 @@ use Ac\Async\Json;
 
 trait ReadTrait {
 
-  static function read($stream, callable $callback, callable $callbackData = null) {
-    $onLine = function($line) use(&$callback, &$callbackData) {
+  static function read($stream, callable $callback, callable $callbackNoJsonData = null) {
+    $onLine = function($line) use(&$callback, &$callbackNoJsonData) {
       if($line === null) {
         call_user_func($callback, null);
         return;
@@ -17,8 +17,8 @@ trait ReadTrait {
       try {
         $d = Json::decode($line);
       } catch(Exception $err) {
-        if(isset($callbackData)) {
-          call_user_func($callbackData, $line);
+        if(isset($callbackNoJsonData)) {
+          call_user_func($callbackNoJsonData, $line);
         }
         return;
       }
