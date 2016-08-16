@@ -46,7 +46,8 @@ class ThroughWrapper {
   }
 
   public function stream_eof() {
-    return feof($this->stream);
+    return false;
+    // return feof($this->stream);
   }
 
   public function stream_close() {
