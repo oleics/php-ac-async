@@ -4,6 +4,7 @@ namespace Ac\Async\Stream;
 
 use \SplFixedArray;
 use Ac\Async\Stream;
+use Ac\Async\Select;
 
 class Pipe {
 
@@ -39,20 +40,20 @@ class Pipe {
   }
 
   public function add($writable) {
-    $id = intval($writable);
-    if(isset($this->pipes[$id])) return $this;
+    $streamId = Select::streamId($writable);
+    if(isset($this->pipes[$streamId])) return $this;
     $p = new SplFixedArray(2);
     $p[0] = $writable;
     $p[1] = Stream::write($writable);
-    $this->pipes[$id] = $p;
+    $this->pipes[$streamId] = $p;
     $this->startReading();
     return $this;
   }
 
   public function remove($writable) {
-    $id = intval($writable);
-    if(!isset($this->pipes[$id])) return $this;
-    unset($this->pipes[$id]);
+    $streamId = Select::streamId($writable);
+    if(!isset($this->pipes[$streamId])) return $this;
+    unset($this->pipes[$streamId]);
     if(empty($this->pipes)) $this->stopReading();
     return $this;
   }
@@ -77,6 +78,18 @@ class Pipe {
     while(($p = array_pop($this->pipes)) !== null) {
       fclose($p[0]);
     }
+  }
+
+  // Static
+
+  static protected $factoryInstances = [];
+
+  static public function &factory($stream) {
+    $streamId = Select::streamId($stream);
+    if(!isset(self::$factoryInstances[$streamId])) {
+      self::$factoryInstances[$streamId] = new Pipe($stream);
+    }
+    return self::$factoryInstances[$streamId];
   }
 
 }
