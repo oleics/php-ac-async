@@ -5,30 +5,24 @@ namespace Ac\Async\Stream;
 use Ac\Async\Async;
 use Ac\Async\Select;
 use Ac\Async\StringParser;
+use Ac\Async\Stream\Reader;
 
 trait ReadTrait {
 
-  static public function read($stream, callable $callback) {
-    $select =& Async::getSelect();
+  static public function read($stream, callable $onData) {
+    $reader =& Reader::factory($stream);
 
-    $readableCallback = function(&$stream) use(&$callback) {
-      if(!is_resource($stream)) return;
-      $buffer = fread($stream, Select::CHUNK_SIZE);
-      if($buffer === '') {
-        if(feof($stream)) {
-          fclose($stream);
-          async($callback, [null]);
-        }
-        return;
-      }
-      async($callback, [$buffer]);
+    $onEnd = function() use(&$onData) {
+      call_user_func($onData, null);
     };
 
-    $select->addCallbackReadable($readableCallback, $stream);
+    $reader->on('data', $onData);
+    $reader->on('end', $onEnd);
 
     // unbind-function
-    return function() use(&$select, &$stream, &$readableCallback) {
-      return $select->removeCallbackReadable($readableCallback, $stream);
+    return function() use(&$onData, &$onEnd, &$reader) {
+      $reader->removeListener('data', $onData);
+      $reader->removeListener('end', $onEnd);
     };
   }
 
@@ -38,13 +32,13 @@ trait ReadTrait {
       if($data === null) {
         $readUnbind();
         foreach($parser->end() as $part) {
-          async($callback, [$part]);
+          call_user_func($callback, $part);
         }
-        async($callback, [null]);
+        call_user_func($callback, null);
         return;
       }
       foreach($parser->write($data) as $part) {
-        async($callback, [$part]);
+        call_user_func($callback, $part);
       }
     });
     return $readUnbind;
