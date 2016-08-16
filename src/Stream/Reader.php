@@ -2,6 +2,7 @@
 
 namespace Ac\Async\Stream;
 
+use \Exception;
 use Ac\Async\Async;
 use Ac\Async\Select;
 use Ac\Async\EventEmitterTrait;

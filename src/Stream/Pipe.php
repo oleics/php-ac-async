@@ -2,6 +2,7 @@
 
 namespace Ac\Async\Stream;
 
+use \Exception;
 use \SplFixedArray;
 use Ac\Async\Stream;
 use Ac\Async\Select;
