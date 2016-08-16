@@ -21,9 +21,9 @@ Testa::Spec(function(){
         describe('WRITE_BUFFER_SIZE');
       });
       describe('State', function(){
-        describe('IDLE');
-        describe('ACTIVE');
-        describe('DONE');
+        describe('STATE_IDLE');
+        describe('STATE_ACTIVE');
+        describe('STATE_DONE');
       });
     });
 
@@ -32,6 +32,8 @@ Testa::Spec(function(){
       });
 
       describe('Methods', function(){
+        describe('->__construct($timeoutSeconds = 0.2)');
+        describe('->setTimeout($timeoutSeconds)');
         describe('->select()');
 
         describe('Add / Remove Streams', function() {
@@ -55,17 +57,42 @@ Testa::Spec(function(){
           describe('->removeCallbackExceptable(callable $callback)');
         });
 
-        describe('General State Change Callbacks', function() {
-          describe('->addIdleCallback(callable $callback)');
-          describe('->removeIdleCallback(callable $callback)');
-          describe('->addActiveCallback(callable $callback)');
-          describe('->removeActiveCallback(callable $callback)');
-          describe('->addDoneCallback(callable $callback)');
-          describe('->removeDoneCallback(callable $callback)');
+      });
+
+      describe('Events', function(){
+        describe('Add / Remove Streams', function(){
+          describe('add-readable $stream');
+          describe('add-writable $stream');
+          describe('add-exceptable $stream');
+          describe('remove-readable $stream');
+          describe('remove-writable $stream');
+          describe('remove-exceptable $stream');
+        });
+
+        describe('Stream State Change', function(){
+          describe('readable $stream');
+          describe('readable-[streamid] $stream');
+          describe('writable $stream');
+          describe('writable-[streamid] $stream');
+          describe('exceptable $stream');
+          describe('exceptable-[streamid] $stream');
+          describe('invalid $stream');
+          describe('invalid-[streamid] $stream');
+        });
+
+        describe('General State Change', function(){
+          describe('idle');
+          describe('active');
+          describe('done');
         });
       });
     });
 
+    describe('Static', function(){
+      describe('Methods', function(){
+        describe('->streamId($stream)');
+      });
+    });
   });
 
 });
