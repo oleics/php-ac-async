@@ -16,7 +16,7 @@ class Log {
   }
 
   private function _log($level, array $args) {
-    if(!isset($this->writer)) {
+    if(!isset($this->write)) {
       $this->write = Json::write($this->stream);
     }
     call_user_func($this->write, [
