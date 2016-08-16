@@ -176,29 +176,22 @@ class Select {
 
   public function addCallbackReadable(callable $callback, $stream = null) {
     if(isset($stream)) {
-      if($stream === true) {
-        $this->on('readable', $callback);
-      } else {
-        $this->addReadable($stream);
-        $this->on('readable-'.self::streamId($stream), $callback);
-      }
+      $this->addReadable($stream);
+      $this->on('readable-'.self::streamId($stream), $callback);
     } else {
-      $this->on('readable', function($stream) use(&$callback) {
-        if(0 === Select::listenerCount($this, 'readable-'.self::streamId($stream))) {
-          call_user_func_array($callback, [$stream]);
-        }
-      });
+      $this->on('readable', $callback);
     }
   }
 
-  public function removeCallbackReadable(callable $callback) {
-    $this->removeListener('readable', $callback);
-    foreach($this->readables as $stream) {
+  public function removeCallbackReadable(callable $callback, $stream = null) {
+    if(isset($stream)) {
       $event = 'readable-'.self::streamId($stream);
       $this->removeListener($event, $callback);
       if(0 === Select::listenerCount($this, $event)) {
         $this->removeReadable($stream);
       }
+    } else {
+      $this->removeListener('readable', $callback);
     }
   }
 
@@ -206,31 +199,22 @@ class Select {
 
   public function addCallbackWritable(callable $callback, $stream = null) {
     if(isset($stream)) {
-      if($stream === true) {
-        $this->on('writable', $callback);
-      } else {
-        // fwrite(STDOUT, "\nadd writable id ".self::streamId($stream)."\n");
-        $this->addWritable($stream);
-        $this->on('writable-'.self::streamId($stream), $callback);
-      }
+      $this->addWritable($stream);
+      $this->on('writable-'.self::streamId($stream), $callback);
     } else {
-      $this->on('writable', function($stream) use(&$callback) {
-        if(0 === Select::listenerCount($this, 'writable-'.self::streamId($stream))) {
-          call_user_func_array($callback, [$stream]);
-        }
-      });
+      $this->on('writable', $callback);
     }
   }
 
-  public function removeCallbackWritable(callable $callback) {
-    $this->removeListener('writable', $callback);
-    foreach($this->writables as $stream) {
-      // fwrite(STDOUT, "\nremove writable id ".self::streamId($stream)."\n");
+  public function removeCallbackWritable(callable $callback, $stream = null) {
+    if(isset($stream)) {
       $event = 'writable-'.self::streamId($stream);
       $this->removeListener($event, $callback);
       if(0 === Select::listenerCount($this, $event)) {
         $this->removeWritable($stream);
       }
+    } else {
+      $this->removeListener('writable', $callback);
     }
   }
 
@@ -238,34 +222,59 @@ class Select {
 
   public function addCallbackExceptable(callable $callback, $stream = null) {
     if(isset($stream)) {
-      if($stream === true) {
-        $this->on('exceptable', $callback);
-      } else {
-        $this->addExceptable($stream);
-        $this->on('exceptable-'.self::streamId($stream), $callback);
-      }
+      $this->addExceptable($stream);
+      $this->on('exceptable-'.self::streamId($stream), $callback);
     } else {
-      $this->on('exceptable', function($stream) use(&$callback) {
-        if(0 === Select::listenerCount($this, 'exceptable-'.self::streamId($stream))) {
-          call_user_func_array($callback, [$stream]);
-        }
-      });
+      $this->on('exceptable', $callback);
     }
   }
 
-  public function removeCallbackExceptable(callable $callback) {
-    $this->removeListener('exceptable', $callback);
-    foreach($this->exceptables as $stream) {
+  public function removeCallbackExceptable(callable $callback, $stream = null) {
+    if(isset($stream)) {
       $event = 'exceptable-'.self::streamId($stream);
       $this->removeListener($event, $callback);
       if(0 === Select::listenerCount($this, $event)) {
         $this->removeExceptable($stream);
       }
+    } else {
+      $this->removeListener('exceptable', $callback);
+    }
+  }
+
+  // Callbacks: Invalid
+
+  public function addCallbackInvalid(callable $callback, $stream = null) {
+    if(isset($stream)) {
+      if(!$this->knowsStream($stream)) {
+        throw new Exception('Unknown stream.');
+      }
+      $this->on('invalid-'.self::streamId($stream), $callback);
+    } else {
+      $this->on('invalid', $callback);
+    }
+  }
+
+  public function removeCallbackInvalid(callable $callback, $stream = null) {
+    if(isset($stream)) {
+      $event = 'invalid-'.self::streamId($stream);
+      $this->removeListener($event, $callback);
+    } else {
+      $this->removeListener('invalid', $callback);
     }
   }
 
   ////////////
   // Streams
+
+  /**
+   * @return bool
+   */
+  public function knowsStream($stream) {
+    if(in_array($stream, $this->readables)) return true;
+    if(in_array($stream, $this->writables)) return true;
+    if(in_array($stream, $this->exceptables)) return true;
+    return false;
+  }
 
   // Streams: Readable
 
