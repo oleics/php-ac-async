@@ -23,6 +23,10 @@ class Reader {
   protected $endEmitted = false;
 
   public function __construct($stream) {
+    if(!is_resource($stream)) {
+      throw new Exception('$stream must be a valid resource.');
+    }
+    
     $streamId = Select::streamId($stream);
     if(isset(self::$factoryInstances[$streamId])) {
       throw new Exception('A reader for that stream already exists. You can use Reader::factory($stream) to resolve this.');

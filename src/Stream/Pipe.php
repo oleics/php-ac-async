@@ -16,6 +16,10 @@ class Pipe {
   protected $closePipes = true;
 
   public function __construct($stream, callable $onDestroy = null, $closePipes = true) {
+    if(!is_resource($stream)) {
+      throw new Exception('$stream must be a valid resource.');
+    }
+
     $streamId = Select::streamId($stream);
     if(isset(self::$factoryInstances[$streamId])) {
       throw new Exception('A pipe for that stream already exists. You can use Pipe::factory($stream) to resolve this.');
