@@ -251,7 +251,7 @@ final class Promise {
    * @return Promise
    */
   static public function parallel(array $iterable, $maxParallel = PHP_INT_MAX) {
-    if(empty($iterable)) return Promise::resolve([]);
+    if(empty($iterable)) return Promise::resolve([ 'values' => [], 'reasons' => [] ]);
     return new Promise(function($resolve, $reject) use(&$iterable, &$maxParallel) {
       $total = $pending = count($iterable);
       $running = 0;
