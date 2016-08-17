@@ -47,7 +47,11 @@ final class Promise {
         // resolve
         function() use(&$resultReturned) {
           if($this->state !== self::STATE_PENDING) {
-            throw new Exception('Promise is already fulfilled or rejected.');
+            if($this->state === self::STATE_REJECTED && $this->reason !== null) {
+              throw $this->reason;
+            } else {
+              throw new Exception('[resolve] Promise is already fulfilled or rejected. ('.$this->state.')');
+            }
           }
           if(func_num_args() === 0) {
             $result = $resultReturned;
@@ -65,7 +69,11 @@ final class Promise {
         // reject
         function($reason) {
           if($this->state !== self::STATE_PENDING) {
-            throw new Exception('Promise already fulfilled or rejected.');
+            if($this->state === self::STATE_REJECTED && $this->reason !== null) {
+              throw $this->reason;
+            } else {
+              throw new Exception('[reject] Promise is already fulfilled or rejected. ('.$this->state.')');
+            }
           }
           $this->reason = $reason;
           $this->state = self::STATE_REJECTED;
