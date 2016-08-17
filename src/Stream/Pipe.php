@@ -73,6 +73,10 @@ class Pipe {
     return $this;
   }
 
+  public function size() {
+    return count($this->pipes);
+  }
+
   public function destroy() {
     if(isset($this->stream)) {
       unset(self::$factoryInstances[Select::streamId($this->stream)]);

@@ -19,6 +19,7 @@ Testa::Spec(function(){
       'Ac\Async\Stream\ProcessTrait',
       'Ac\Async\Stream\ReadTrait',
       'Ac\Async\Stream\WriteTrait',
+      'Ac\Async\Stream\PipeTrait',
     ]);
 
   });

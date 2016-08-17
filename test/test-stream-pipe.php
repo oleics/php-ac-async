@@ -9,7 +9,7 @@ use Ac\Async\Stream\Pipe;
 
 Testa::Spec(function(){
 
-  describe('abstract class Pipe', function() {
+  describe('class Pipe', function() {
 
     it('is available under "Ac\Async\Stream\Pipe"', function() {
       assert(Pipe::class === 'Ac\Async\Stream\Pipe');
