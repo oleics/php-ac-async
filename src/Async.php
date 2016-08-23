@@ -298,6 +298,10 @@ namespace Ac\Async {
       return self::$kernel->getSelect();
     }
 
+    static public function &getLog() {
+      return self::$kernel->getLog();
+    }
+
   }
 
 }

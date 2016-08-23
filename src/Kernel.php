@@ -47,9 +47,21 @@ class Kernel {
     if(isset($framerate)) $this->framerate = $framerate;
 
     if(isset($log)) {
-      $this->log =& $log;
+      $this->setLog($log);
     } else {
-      $this->log = new Log();
+      $this->setLog(new Log([
+        'name' => 'kernel',
+        'infos' => [
+          'kernel' => $this
+        ],
+        'serializers' => [
+          'kernel' => function(Kernel $kernel) {
+            return [
+              'frame' => $kernel->frame
+            ];
+          }
+        ]
+      ]));
     }
 
     if(isset($select)) {

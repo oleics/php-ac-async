@@ -8,8 +8,14 @@ trait LogTrait {
   static public $SUCCESSIVE_DRIFTS_WARN  = 20;
   static public $SUCCESSIVE_DRIFTS_FATAL = 200;
 
+  protected $log;
+
   public function setLog($log) {
     $this->log = $log;
+  }
+
+  public function &getLog() {
+    return $this->log;
   }
 
   public function frameInfos() {
@@ -19,7 +25,7 @@ trait LogTrait {
     if($this->frame == 1) {
       $tooSlow = false;
       $tooFast = false;
-      $this->log->info('Kernel Start: mode '.$this->mode.', framerate '.$this->framerate.'');
+      $this->log->debug('Kernel Start: mode %s, framerate %f', $this->mode, $this->framerate);
     }
 
     if($this->successiveNegativeTimeDrifts == self::$SUCCESSIVE_DRIFTS_FATAL) {
@@ -62,6 +68,8 @@ trait LogTrait {
         $tooFast = false;
         return;
       }
+
+      if($this->frame % 2 === 0) $this->log->trace();
 
     }
   }
